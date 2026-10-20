@@ -3,21 +3,29 @@ a=[11120317534965980962706634680244446586704190749525072688562989113841959, 1067
 bag=566112302689069700357897525326735335805099466251145411713829619898589100
 B=[]
 for i in range(105):
-    A=[2]*106
-    A[i]=1
-    A[105]=a[i]*1000000000000000000000
+    A=[0]*106
+    A[i]=2
+    A[105]=a[i]*2**100
     B.append(A)
 A=[1]*106
-A[105]=bag*1000000000000000000000
+A[105]=bag*2**100
 B.append(A)
 B_=Matrix(ZZ,B)
-B_=B_.LLL()
+B_=B_.BKZ(block_size=20)
 for c in B_:
     flag=0
     for d in c:
-        if abs(d)>=2:
+        if abs(d)>=2 or c[-1]!=0:
             flag=1
             break
     if flag==0:
         print(c)
-        break
+        flag1=0
+        flag2=0
+        for i in range(104,-1,-1):
+            flag1=-(c[i]-1)/2+flag1*2
+            flag2=-(-c[i]-1)/2+flag2*2
+        print(flag1)
+        print(flag2)
+        print(long_to_bytes(int(flag1)))
+        print(long_to_bytes(int(flag2)))
